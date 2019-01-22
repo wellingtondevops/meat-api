@@ -6,7 +6,7 @@ class UserRouter extends router_1.Router {
     applyRoutes(applycation) {
         //endpoint pesquisa todos usuários;
         applycation.get('/users', (req, resp, next) => {
-            users_mode_1.User.findAll().then(users => {
+            users_mode_1.User.find().then(users => {
                 resp.json(users);
                 return next();
             });

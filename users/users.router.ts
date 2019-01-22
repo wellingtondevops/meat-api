@@ -12,7 +12,7 @@ class UserRouter extends Router {
 
         applycation.get('/users', (req, resp, next)=>{
 
-            User.findAll().then(users=> {
+            User.find().then(users=> {
 
                 resp.json(users)
                 return next()
