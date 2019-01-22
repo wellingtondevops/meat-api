@@ -1,0 +1,21 @@
+{
+  "name": "meat-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "monk": "^6.0.6",
+    "package.json": "^2.0.1",
+    "resolve": "^1.10.0",
+    "restify": "6.3.4"
+  },
+  "devDependencies": {
+    "@types/restify": "5.0.6"
+  }
+}
