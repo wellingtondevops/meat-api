@@ -8,7 +8,7 @@ server.bootstrap([usersRouter]).then(server => {
 
 
 }).catch(error => {
-    console.log('Server failed to start')
+    console.log('Server failed to Start')
     console.error(error)
     process.exit(1)
 })
