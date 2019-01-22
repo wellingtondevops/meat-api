@@ -26,7 +26,7 @@ class UserRouter extends Router {
         applycation.get('/users/:id', (req, resp, next)=>{
             User.findById(req.params.id).then(user=>{
                 if(user){
-                    resp.json(user)
+                    resp.json(user)                    
                     return next
                 }                
                 resp.send(404)
@@ -34,8 +34,16 @@ class UserRouter extends Router {
                 
             })
         })
-
         //new endpoint
+
+        applycation.post('/users', (req, resp, next)=>{
+            let user = new User(req.body)            
+            user.save().then(user=>{
+                user.password = undefined
+                resp.json(user)
+                return next()
+            })
+        })
     }
 }
 

@@ -23,6 +23,14 @@ class UserRouter extends router_1.Router {
             });
         });
         //new endpoint
+        applycation.post('/users', (req, resp, next) => {
+            let user = new users_mode_1.User(req.body);
+            user.save().then(user => {
+                user.password = undefined;
+                resp.json(user);
+                return next();
+            });
+        });
     }
 }
 exports.usersRouter = new UserRouter();
