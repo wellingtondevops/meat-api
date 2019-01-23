@@ -32,7 +32,6 @@ class Server {
             }
         });
     }
-    //iniciando
     bootstrap(routers = []) {
         return this.initializeDb().then(() => this.initRoutes(routers).then(() => this));
     }

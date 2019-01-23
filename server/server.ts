@@ -41,7 +41,6 @@ export class Server {
       }
     })
   }
-  //iniciando
 
   bootstrap(routers: Router[] = []): Promise<Server>{
       return this.initializeDb().then(()=>
