@@ -8,7 +8,7 @@ class UserRouter extends Router {
 
     applyRoutes(applycation: restify.Server){
 
-         //endpoint pesquisa todos usuários;
+         //endpoint pesquis todos usuários;
 
         applycation.get('/users', (req, resp, next)=>{
 

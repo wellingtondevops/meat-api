@@ -4,7 +4,7 @@ const restify = require("restify");
 const mongoose = require("mongoose");
 const environment_1 = require("../common/environment");
 class Server {
-    initializeDB() {
+    initializeDb() {
         mongoose.Promise = global.Promise;
         return mongoose.connect(environment_1.environment.db.url, {
             useMongoClient: true
@@ -18,6 +18,7 @@ class Server {
                     version: '1.0.0'
                 });
                 this.application.use(restify.plugins.queryParser());
+                this.application.use(restify.plugins.bodyParser());
                 //routes
                 for (let router of routers) {
                     router.applyRoutes(this.application);
@@ -32,7 +33,7 @@ class Server {
         });
     }
     bootstrap(routers = []) {
-        return this.initializeDB().then(() => this.initRoutes(routers).then(() => this));
+        return this.initializeDb().then(() => this.initRoutes(routers).then(() => this));
     }
 }
 exports.Server = Server;
