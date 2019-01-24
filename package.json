@@ -19,6 +19,6 @@
   },
   "devDependencies": {
     "@types/mongoose": "^4.7.43",
-    "@types/restify": "^5.0.6"
+    "@types/restify": "^5.0.11"
   }
 }

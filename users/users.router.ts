@@ -44,6 +44,40 @@ class UserRouter extends Router {
                 return next()
             })
         })
+
+        applycation.put('/users/:id', (req, resp, next)=>{
+            const options  = {overwrite: true}
+            User.update({_id:req.params.id}, req.body, options)
+                .exec().then(result=>{
+                  if(result.n){
+                    return User.findById(req.params.id)
+                  }else{
+                    resp.send(404)
+                  }
+            }).then(user=>{
+              resp.json(user)
+              return next()
+            })
+          })
+
+
+          //metodo Path melhor não precisa  alterar tudo objeto
+
+        applycation.patch('users/:id', (req, resp, next)=>{
+            const options = {new :true}
+
+            User.findByIdAndUpdate(req.params.id, req.body).
+            then(user=>{
+                if(user){
+                    resp.json(user)
+                    return next()
+                }
+                resp.send(404)
+                return next()
+            })
+        })
+
+
     }
 }
 
