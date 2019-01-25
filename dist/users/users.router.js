@@ -3,33 +3,25 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const router_1 = require("../common/router");
 const users_mode_1 = require("./users.mode");
 class UserRouter extends router_1.Router {
+    constructor() {
+        super();
+        this.on('beforeRender', document => {
+            document.password = undefined;
+        });
+    }
     applyRoutes(applycation) {
         //endpoint pesquis todos usuários;
         applycation.get('/users', (req, resp, next) => {
-            users_mode_1.User.find().then(users => {
-                resp.json(users);
-                return next();
-            });
+            users_mode_1.User.find().then(this.render(resp, next));
         });
         //endpoint pesquisa usuário por id;
         applycation.get('/users/:id', (req, resp, next) => {
-            users_mode_1.User.findById(req.params.id).then(user => {
-                if (user) {
-                    resp.json(user);
-                    return next;
-                }
-                resp.send(404);
-                return next();
-            });
+            users_mode_1.User.findById(req.params.id).then(this.render(resp, next));
         });
         //new endpoint
         applycation.post('/users', (req, resp, next) => {
             let user = new users_mode_1.User(req.body);
-            user.save().then(user => {
-                user.password = undefined;
-                resp.json(user);
-                return next();
-            });
+            user.save().then(this.render(resp, next));
         });
         applycation.put('/users/:id', (req, resp, next) => {
             const options = { overwrite: true };
@@ -41,23 +33,13 @@ class UserRouter extends router_1.Router {
                 else {
                     resp.send(404);
                 }
-            }).then(user => {
-                resp.json(user);
-                return next();
-            });
+            }).then(this.render(resp, next));
         });
         //metodo Path melhor não precisa  alterar tudo objeto
         applycation.patch('users/:id', (req, resp, next) => {
             const options = { new: true };
             users_mode_1.User.findByIdAndUpdate(req.params.id, req.body).
-                then(user => {
-                if (user) {
-                    resp.json(user);
-                    return next();
-                }
-                resp.send(404);
-                return next();
-            });
+                then(this.render(resp, next));
         });
         applycation.del('/users/:id', (req, resp, next) => {
             users_mode_1.User.remove({ _id: req.params.id }).exec().then((cmResult) => {

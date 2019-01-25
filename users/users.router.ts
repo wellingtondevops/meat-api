@@ -4,6 +4,13 @@ import {User} from './users.mode'
 
 class UserRouter extends Router {
 
+    constructor(){
+        super()
+        this.on('beforeRender', document=>{
+            document.password= undefined
+        })
+    }
+
 
 
     applyRoutes(applycation: restify.Server){
@@ -12,37 +19,19 @@ class UserRouter extends Router {
 
         applycation.get('/users', (req, resp, next)=>{
 
-            User.find().then(users=> {
-
-                resp.json(users)
-                return next()
-
-            })
-
+            User.find().then(this.render(resp, next))
         })
 
         //endpoint pesquisa usuário por id;
 
         applycation.get('/users/:id', (req, resp, next)=>{
-            User.findById(req.params.id).then(user=>{
-                if(user){
-                    resp.json(user)                    
-                    return next
-                }                
-                resp.send(404)
-                return next()              
-                
-            })
+            User.findById(req.params.id).then(this.render(resp, next))
         })
         //new endpoint
 
         applycation.post('/users', (req, resp, next)=>{
             let user = new User(req.body)            
-            user.save().then(user=>{
-                user.password = undefined
-                resp.json(user)
-                return next()
-            })
+            user.save().then(this.render(resp, next))
         })
 
         applycation.put('/users/:id', (req, resp, next)=>{
@@ -54,10 +43,7 @@ class UserRouter extends Router {
                   }else{
                     resp.send(404)
                   }
-            }).then(user=>{
-              resp.json(user)
-              return next()
-            })
+            }).then(this.render(resp, next))
           })
 
 
@@ -67,14 +53,7 @@ class UserRouter extends Router {
             const options = {new :true}
 
             User.findByIdAndUpdate(req.params.id, req.body).
-            then(user=>{
-                if(user){
-                    resp.json(user)
-                    return next()
-                }
-                resp.send(404)
-                return next()
-            })
+            then(this.render(resp, next))
         })
 
         applycation.del('/users/:id', (req, resp, next)=>{
