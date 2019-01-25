@@ -47,7 +47,7 @@ class UserRouter extends Router {
 
         applycation.put('/users/:id', (req, resp, next)=>{
             const options  = {overwrite: true}
-            User.update({_id:req.params.id}, req.body, options)
+            User.update({_id:req.params.id}, req.body,  options)
                 .exec().then(result=>{
                   if(result.n){
                     return User.findById(req.params.id)
@@ -75,6 +75,18 @@ class UserRouter extends Router {
                 resp.send(404)
                 return next()
             })
+        })
+
+        applycation.del('/users/:id', (req, resp, next)=>{
+            User.remove({_id: req.params.id}).exec().then((cmResult: any)=>{
+                if(cmResult.result.n){
+                    resp.send(204)                    
+                }else{
+                    resp.send(400)
+                }
+                return next()
+            })
+
         })
 
 
