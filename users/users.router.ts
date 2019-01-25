@@ -1,6 +1,6 @@
 import { Router } from "../common/router";
 import * as restify from 'restify'
-import {User} from './users.mode'
+import {User} from './users.model'
 import {NotFoundError} from 'restify-errors'
 
 class UserRouter extends Router {

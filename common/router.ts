@@ -12,7 +12,7 @@ export abstract class Router extends EventEmitter {
         this.emit('beforeRender', document)
         response.json(document)
       }else{
-        throw new NotFoundError('Usuário não encontrado')
+        throw new NotFoundError('Usuário não encontrado!')
       }
       return next()
     }

@@ -1,6 +1,8 @@
 import * as restify from 'restify'
 
 export const handleError = (req: restify.Request, resp: restify.Response, err, done)=>{
+   // para ver os logs do erro no console
+    
 
   err.toJSON = ()=>{
     return {
@@ -15,6 +17,13 @@ export const handleError = (req: restify.Request, resp: restify.Response, err, d
       break
     case 'ValidationError':
       err.statusCode = 400
+      const messages: any[]= []
+      for(let name in err.errors){
+          messages.push({message: err.errors[name].message})
+      }
+      err.toJSON = ()=>({
+          erros: messages
+      })
       break
   }
   done()

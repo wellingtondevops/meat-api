@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.handleError = (req, resp, err, done) => {
+    // para ver os logs do erro no console
     err.toJSON = () => {
         return {
             message: err.message
@@ -14,6 +15,13 @@ exports.handleError = (req, resp, err, done) => {
             break;
         case 'ValidationError':
             err.statusCode = 400;
+            const messages = [];
+            for (let name in err.errors) {
+                messages.push({ message: err.errors[name].message });
+            }
+            err.toJSON = () => ({
+                erros: messages
+            });
             break;
     }
     done();
