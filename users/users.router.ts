@@ -36,7 +36,7 @@ class UserRouter extends Router {
         })
 
         applycation.put('/users/:id', (req, resp, next)=>{
-            const options  = {overwrite: true}
+            const options  = {runValidators:true, overwrite: true}
             User.update({_id:req.params.id}, req.body,  options)
                 .exec().then(result=>{
                   if(result.n){
@@ -51,11 +51,13 @@ class UserRouter extends Router {
           //metodo Path melhor não precisa  alterar tudo objeto
 
         applycation.patch('users/:id', (req, resp, next)=>{
-            const options = {new :true}
+            const options = {runValidators:true, new :true}
 
-            User.findByIdAndUpdate(req.params.id, req.body).
+            User.findByIdAndUpdate(req.params.id, req.body, options).
             then(this.render(resp, next)).catch(next)
         })
+
+        
 
         applycation.del('/users/:id', (req, resp, next)=>{
             User.remove({_id: req.params.id}).exec().then((cmResult: any)=>{
@@ -68,7 +70,6 @@ class UserRouter extends Router {
             }).catch(next)
 
         })
-
 
     }
 }
