@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const router_1 = require("../common/router");
 const users_mode_1 = require("./users.mode");
+const restify_errors_1 = require("restify-errors");
 class UserRouter extends router_1.Router {
     constructor() {
         super();
@@ -16,12 +17,12 @@ class UserRouter extends router_1.Router {
         });
         //endpoint pesquisa usuário por id;
         applycation.get('/users/:id', (req, resp, next) => {
-            users_mode_1.User.findById(req.params.id).then(this.render(resp, next));
+            users_mode_1.User.findById(req.params.id).then(this.render(resp, next)).catch(next);
         });
         //new endpoint
         applycation.post('/users', (req, resp, next) => {
             let user = new users_mode_1.User(req.body);
-            user.save().then(this.render(resp, next));
+            user.save().then(this.render(resp, next)).catch(next);
         });
         applycation.put('/users/:id', (req, resp, next) => {
             const options = { overwrite: true };
@@ -31,15 +32,15 @@ class UserRouter extends router_1.Router {
                     return users_mode_1.User.findById(req.params.id);
                 }
                 else {
-                    resp.send(404);
+                    throw new restify_errors_1.NotFoundError('Usuário não encontrado!');
                 }
-            }).then(this.render(resp, next));
+            }).then(this.render(resp, next)).catch(next);
         });
         //metodo Path melhor não precisa  alterar tudo objeto
         applycation.patch('users/:id', (req, resp, next) => {
             const options = { new: true };
             users_mode_1.User.findByIdAndUpdate(req.params.id, req.body).
-                then(this.render(resp, next));
+                then(this.render(resp, next)).catch(next);
         });
         applycation.del('/users/:id', (req, resp, next) => {
             users_mode_1.User.remove({ _id: req.params.id }).exec().then((cmResult) => {
@@ -47,10 +48,10 @@ class UserRouter extends router_1.Router {
                     resp.send(204);
                 }
                 else {
-                    resp.send(400);
+                    throw new restify_errors_1.NotFoundError('Usuário não encontrado!');
                 }
                 return next();
-            });
+            }).catch(next);
         });
     }
 }

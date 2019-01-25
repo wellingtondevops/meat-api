@@ -1,6 +1,7 @@
 import { Router } from "../common/router";
 import * as restify from 'restify'
 import {User} from './users.mode'
+import {NotFoundError} from 'restify-errors'
 
 class UserRouter extends Router {
 
@@ -25,13 +26,13 @@ class UserRouter extends Router {
         //endpoint pesquisa usuário por id;
 
         applycation.get('/users/:id', (req, resp, next)=>{
-            User.findById(req.params.id).then(this.render(resp, next))
+            User.findById(req.params.id).then(this.render(resp, next)).catch(next)
         })
         //new endpoint
 
         applycation.post('/users', (req, resp, next)=>{
             let user = new User(req.body)            
-            user.save().then(this.render(resp, next))
+            user.save().then(this.render(resp, next)).catch(next)
         })
 
         applycation.put('/users/:id', (req, resp, next)=>{
@@ -41,9 +42,9 @@ class UserRouter extends Router {
                   if(result.n){
                     return User.findById(req.params.id)
                   }else{
-                    resp.send(404)
+                    throw new NotFoundError('Usuário não encontrado!')
                   }
-            }).then(this.render(resp, next))
+            }).then(this.render(resp, next)).catch(next)
           })
 
 
@@ -53,7 +54,7 @@ class UserRouter extends Router {
             const options = {new :true}
 
             User.findByIdAndUpdate(req.params.id, req.body).
-            then(this.render(resp, next))
+            then(this.render(resp, next)).catch(next)
         })
 
         applycation.del('/users/:id', (req, resp, next)=>{
@@ -61,10 +62,10 @@ class UserRouter extends Router {
                 if(cmResult.result.n){
                     resp.send(204)                    
                 }else{
-                    resp.send(400)
+                    throw new NotFoundError('Usuário não encontrado!')
                 }
                 return next()
-            })
+            }).catch(next)
 
         })
 
