@@ -13,11 +13,27 @@ class UserRouter extends ModelRouter<User> {
         })
     }
 
+    //exemplo de de busca por email querey email:
+
+    findByEmail = (req, resp, next)=>{
+        if(req.query.email){
+            User.find({email: req.query.email})
+            .then(this.renderAll(resp, next))
+            .catch(next)
+        }else{
+            next()
+        }
+    }
 
 
-    applyRoutes(applycation: restify.Server){         
 
-        applycation.get('/users', this.findAll)    
+    applyRoutes(applycation: restify.Server){      
+        
+        //Exemplo de coontrole de versão da API
+
+        applycation.get({path:'/users', version: '2.0.0'},[this.findByEmail, this.findAll])    
+
+        applycation.get({path:'/users', version: '1.0.0'}, this.findAll)      
 
         applycation.get('/users/:id',[this.validateId,this.findById])      
 
