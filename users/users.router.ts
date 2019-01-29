@@ -38,19 +38,19 @@ class UserRouter extends ModelRouter<User> {
         
         //Exemplo de coontrole de versão da API
 
-        applycation.get({path:'/users', version: '2.0.0'},[this.findByEmail, this.findAll])    
+        applycation.get({path:`${this.basePath}`, version: '2.0.0'},[this.findByEmail, this.findAll])    
 
-        applycation.get({path:'/users', version: '1.0.0'}, this.findAll)      
+        applycation.get({path:`${this.basePath}`, version: '1.0.0'}, this.findAll)      
 
-        applycation.get('/users/:id',[this.validateId,this.findById])      
+        applycation.get(`${this.basePath}/:id`,[this.validateId,this.findById])      
 
-        applycation.post('/users', this.save)
+        applycation.post(`${this.basePath}`, this.save)
 
-        applycation.put('/users/:id',[this.validateId, this.replace])        
+        applycation.put(`${this.basePath}/:id`,[this.validateId, this.replace])        
 
-        applycation.patch('users/:id',[this.validateId, this.update])        
+        applycation.patch(`${this.basePath}/:id`,[this.validateId, this.update])        
 
-        applycation.del('/users/:id', [this.validateId,this.delete])    }
+        applycation.del(`${this.basePath}/:id`, [this.validateId,this.delete])    }
 }
 
 export const usersRouter = new UserRouter()

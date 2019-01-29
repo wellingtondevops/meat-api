@@ -33,15 +33,20 @@ class RestaurantsRouter extends model_router_1.ModelRouter {
             }).catch(next);
         };
     }
+    envelop(document) {
+        let resource = super.envelop(document);
+        resource._links.menu = `${this.basePath}/${resource._id}/menu`;
+        return resource;
+    }
     applyRoutes(applycation) {
-        applycation.get('/restaurants', this.findAll);
-        applycation.get('/restaurants/:id', [this.validateId, this.findById]);
-        applycation.post('/restaurants', this.save);
-        applycation.put('/restaurants/:id', [this.validateId, this.replace]);
-        applycation.patch('restaurants/:id', [this.validateId, this.update]);
-        applycation.del('/restaurants/:id', [this.validateId, this.delete]);
-        applycation.get('/restaurants/:id/menu', [this.validateId, this.findMenu]);
-        applycation.put('/restaurants/:id/menu', [this.validateId, this.replaceMenu]);
+        applycation.get(`${this.basePath}`, this.findAll);
+        applycation.get(`${this.basePath}/:id`, [this.validateId, this.findById]);
+        applycation.post(`${this.basePath}`, this.save);
+        applycation.put(`${this.basePath}/:id`, [this.validateId, this.replace]);
+        applycation.patch(`${this.basePath}/:id`, [this.validateId, this.update]);
+        applycation.del(`${this.basePath}/:id`, [this.validateId, this.delete]);
+        applycation.get(`${this.basePath}/:id/menu`, [this.validateId, this.findMenu]);
+        applycation.put(`${this.basePath}/:id/menu`, [this.validateId, this.replaceMenu]);
     }
 }
 exports.restaurantsRouter = new RestaurantsRouter();

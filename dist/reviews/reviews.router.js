@@ -10,6 +10,12 @@ class ReviewsRouter extends model_router_1.ModelRouter {
         return query.populate('user', 'name')
             .populate('restaurant', 'name');
     }
+    envelop(document) {
+        let resource = super.envelop(document);
+        const restID = document.restaurant._id ? document.restaurant._id : document.restaurant;
+        resource._links.restaurant = `/restaurants/${restID}`;
+        return resource;
+    }
     /*findById = (req, resp, next)=>{
         this.model.findById(req.params.id)
             .populate('user', 'name')
@@ -18,9 +24,9 @@ class ReviewsRouter extends model_router_1.ModelRouter {
             .catch(next)
     }*/
     applyRoutes(applycation) {
-        applycation.get('/reviews', this.findAll);
-        applycation.get('/reviews/:id', [this.validateId, this.findById]);
-        applycation.post('/reviews', this.save);
+        applycation.get(`${this.basePath}`, this.findAll);
+        applycation.get(`${this.basePath}/:id`, [this.validateId, this.findById]);
+        applycation.post(`${this.basePath}`, this.save);
     }
 }
 exports.reviewsRouter = new ReviewsRouter();

@@ -6,8 +6,15 @@ import {Restaurant} from './restaurants.model'
 
 class RestaurantsRouter extends ModelRouter<Restaurant>{
     constructor(){
-        super(Restaurant)
+        super(Restaurant)        
     }
+    envelop(document){
+        let resource = super.envelop(document)
+        resource._links.menu = `${this.basePath}/${resource._id}/menu`
+        return resource
+
+    }
+
     findMenu = (req, resp, next)=>{
         Restaurant.findById(req.params.id, "+menu")
         .then(rest =>{
@@ -36,21 +43,21 @@ class RestaurantsRouter extends ModelRouter<Restaurant>{
 
     applyRoutes(applycation: restify.Server){         
 
-        applycation.get('/restaurants', this.findAll)    
+        applycation.get(`${this.basePath}`, this.findAll)    
 
-        applycation.get('/restaurants/:id',[this.validateId,this.findById])      
+        applycation.get(`${this.basePath}/:id`,[this.validateId,this.findById])      
 
-        applycation.post('/restaurants', this.save)
+        applycation.post(`${this.basePath}`, this.save)
 
-        applycation.put('/restaurants/:id',[this.validateId, this.replace])        
+        applycation.put(`${this.basePath}/:id`,[this.validateId, this.replace])        
 
-        applycation.patch('restaurants/:id',[this.validateId, this.update])        
+        applycation.patch(`${this.basePath}/:id`,[this.validateId, this.update])        
 
-        applycation.del('/restaurants/:id', [this.validateId,this.delete])
+        applycation.del(`${this.basePath}/:id`, [this.validateId,this.delete])
 
-        applycation.get('/restaurants/:id/menu', [this.validateId, this.findMenu])  
+        applycation.get(`${this.basePath}/:id/menu`, [this.validateId, this.findMenu])  
 
-        applycation.put('/restaurants/:id/menu',[this.validateId, this.replaceMenu])
+        applycation.put(`${this.basePath}/:id/menu`,[this.validateId, this.replaceMenu])
 
       }
 }
