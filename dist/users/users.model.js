@@ -22,6 +22,11 @@ const userSchema = new mongoose.Schema({
         select: false,
         required: true
     },
+    gender: {
+        type: String,
+        required: false,
+        enum: ['Male', 'Female']
+    },
     cpf: {
         type: String,
         required: false,
@@ -31,8 +36,11 @@ const userSchema = new mongoose.Schema({
         }
     }
 });
-userSchema.statics.findByEmail = function (email) {
-    return this.findOne({ email }); //{email: email}
+userSchema.statics.findByEmail = function (email, projection) {
+    return this.findOne({ email }, projection); //{email: email}
+};
+userSchema.methods.matches = function (password) {
+    return bcrypt.compareSync(password, this.password);
 };
 const hashPassword = (obj, next) => {
     bcrypt.hash(obj.password, environment_1.environment.security.saltRounds)

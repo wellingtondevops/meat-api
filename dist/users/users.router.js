@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const model_router_1 = require("../common/model-router");
 const users_model_1 = require("./users.model");
+const auth_handler_1 = require("../security/auth.handler");
 class UserRouter extends model_router_1.ModelRouter {
     constructor() {
         super(users_model_1.User);
@@ -37,6 +38,7 @@ class UserRouter extends model_router_1.ModelRouter {
         applycation.put(`${this.basePath}/:id`, [this.validateId, this.replace]);
         applycation.patch(`${this.basePath}/:id`, [this.validateId, this.update]);
         applycation.del(`${this.basePath}/:id`, [this.validateId, this.delete]);
+        applycation.post(`${this.basePath}/authenticate`, auth_handler_1.authenticate);
     }
 }
 exports.usersRouter = new UserRouter();
