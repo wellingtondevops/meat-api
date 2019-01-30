@@ -34,7 +34,7 @@ class RestaurantsRouter extends model_router_1.ModelRouter {
         };
     }
     envelop(document) {
-        let resource = super.envelop(document);
+        let resource = super.envelope(document);
         resource._links.menu = `${this.basePath}/${resource._id}/menu`;
         return resource;
     }

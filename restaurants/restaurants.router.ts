@@ -9,7 +9,7 @@ class RestaurantsRouter extends ModelRouter<Restaurant>{
         super(Restaurant)        
     }
     envelop(document){
-        let resource = super.envelop(document)
+        let resource = super.envelope(document)
         resource._links.menu = `${this.basePath}/${resource._id}/menu`
         return resource
 

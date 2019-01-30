@@ -11,7 +11,7 @@ class ReviewsRouter extends model_router_1.ModelRouter {
             .populate('restaurant', 'name');
     }
     envelop(document) {
-        let resource = super.envelop(document);
+        let resource = super.envelope(document);
         const restID = document.restaurant._id ? document.restaurant._id : document.restaurant;
         resource._links.restaurant = `/restaurants/${restID}`;
         return resource;
