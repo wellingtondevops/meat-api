@@ -22,11 +22,6 @@ const userSchema = new mongoose.Schema({
         select: false,
         required: true
     },
-    gender: {
-        type: String,
-        required: false,
-        enum: ['Male', 'Female']
-    },
     cpf: {
         type: String,
         required: false,
