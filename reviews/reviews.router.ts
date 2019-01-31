@@ -3,6 +3,8 @@ import * as restify from 'restify'
 import {NotFoundError} from 'restify-errors'
 import {Review} from './reviews.model'
 import * as mongoose from 'mongoose'
+import {authenticate} from '../security/auth.handler'
+import {authorize} from '../security/authz.handler'
 
 
 class ReviewsRouter extends ModelRouter<Review>{
@@ -38,7 +40,7 @@ class ReviewsRouter extends ModelRouter<Review>{
 
         applycation.get(`${this.basePath}/:id`,[this.validateId,this.findById])      
 
-        applycation.post(`${this.basePath}`, this.save)
+        applycation.post(`${this.basePath}`, [authorize('user'),this.save])
         
     }
 }

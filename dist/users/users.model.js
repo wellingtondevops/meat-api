@@ -34,6 +34,10 @@ const userSchema = new mongoose.Schema({
             validator: validator_1.validateCPF,
             message: '{PATH}: Invalid CPF ({VALUE})'
         }
+    },
+    profiles: {
+        type: [String],
+        required: false
     }
 });
 userSchema.statics.findByEmail = function (email, projection) {
@@ -48,6 +52,9 @@ const hashPassword = (obj, next) => {
         obj.password = hash;
         next();
     }).catch(next);
+};
+userSchema.methods.hasAny = function (...profiles) {
+    return profiles.some(profile => this.profiles.indexOf(profile) !== -1);
 };
 const saveMiddleware = function (next) {
     const user = this;

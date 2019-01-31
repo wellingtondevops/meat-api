@@ -10,7 +10,9 @@ export interface User extends mongoose.Document{
     password: string,
     cpf: string,
     gender: string,
-    matches(password: string): boolean
+    profiles: string[],
+    matches(password: string): boolean,
+    hasAny(...profiles: string[]): boolean
     
 }
 
@@ -55,6 +57,10 @@ const userSchema =new mongoose.Schema({
             validator: validateCPF,
             message: '{PATH}: Invalid CPF ({VALUE})'
         }
+    },
+    profiles: {
+        type: [String],
+        required:false
     }
 })
 
@@ -74,6 +80,13 @@ const hashPassword = (obj, next)=>{
             next()
           }).catch(next)
   }
+
+  userSchema.methods.hasAny = function(...profiles: string[]) : boolean{
+      return profiles.some(profile => this.profiles.indexOf(profile)!== -1)
+  }
+
+ 
+
   
   const saveMiddleware = function (next){
     const user: User = this

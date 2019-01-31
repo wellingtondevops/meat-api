@@ -2,6 +2,8 @@ import {ModelRouter} from '../common/model-router'
 import * as restify from 'restify'
 import {NotFoundError} from 'restify-errors'
 import {Restaurant} from './restaurants.model'
+import {authenticate} from '../security/auth.handler'
+import {authorize} from '../security/authz.handler'
 
 
 class RestaurantsRouter extends ModelRouter<Restaurant>{
@@ -47,17 +49,17 @@ class RestaurantsRouter extends ModelRouter<Restaurant>{
 
         applycation.get(`${this.basePath}/:id`,[this.validateId,this.findById])      
 
-        applycation.post(`${this.basePath}`, this.save)
+        applycation.post(`${this.basePath}`, [authorize('admin'),this.save])
 
-        applycation.put(`${this.basePath}/:id`,[this.validateId, this.replace])        
+        applycation.put(`${this.basePath}/:id`,[authorize('admin'),this.validateId, this.replace])        
 
         applycation.patch(`${this.basePath}/:id`,[this.validateId, this.update])        
 
-        applycation.del(`${this.basePath}/:id`, [this.validateId,this.delete])
+        applycation.del(`${this.basePath}/:id`, [authorize('admin'),this.validateId,this.delete])
 
         applycation.get(`${this.basePath}/:id/menu`, [this.validateId, this.findMenu])  
 
-        applycation.put(`${this.basePath}/:id/menu`,[this.validateId, this.replaceMenu])
+        applycation.put(`${this.basePath}/:id/menu`,[authorize('admin'),this.validateId, this.replaceMenu])
 
       }
 }
